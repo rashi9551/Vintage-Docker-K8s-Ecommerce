@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Lato|Roboto+Slab');
+
+        * {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .centered {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 50px;
+            font-family: 'Lato', sans-serif;
+            font-size: 50px;
+        }
+
+        .message {
+            font-family: 'Roboto Slab', serif;
+            font-size: 30px;
+            color: #000000;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <section class="centered">
+        <h1>500 Server Error</h1>
+        <div class="container">
+            <span class="message" id="js-whoops"></span>
+            <span class="message" id="js-appears"></span>
+            <span class="message" id="js-error"></span>
+            <span class="message" id="js-apology"></span>
+            <div><span class="hidden" id="js-hidden" style="color: white;">Message Here</span></div>
+        </div>
+    </section>
+    <script>
+        const messages = [
+            ['Whoops.', 'Oops.', 'Excuse me.', 'Oh Dear.', 'Hm...', 'This is awkward.', 'Well gosh!'],
+            ['It appears', 'Looks like', 'Unfortunately,', 'It just so happens', 'Sadly,', 'Seemingly from nowhere'],
+            ['there was an error.', 'we goofed up.', 'a bad thing happened.', 'the server crashed.', 'a bug appeared.', 'pixies got into the server!', 'the server threw a tantrum.', 'the website had a bad day.'],
+            ['Sorry.', 'Apologies.', 'Our bad.', 'Sad day.', 'We are quite contrite.', 'Beg pardon.']
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageElements = [
+                document.querySelector('#js-whoops'),
+                document.querySelector('#js-appears'),
+                document.querySelector('#js-error'),
+                document.querySelector('#js-apology')
+            ];
+
+            const widthElement = document.querySelector('#js-hidden');
+            let lastMessageType = -1;
+            let messageTimer = 4000;
+
+            function setupMessages() {
+                messageElements.forEach((element, index) => {
+                    if (element) {
+                        let newMessage = getNewMessage(index);
+                        element.innerHTML = newMessage;
+                        calculateWidth(element, newMessage);
+                    }
+                });
+            }
+
+            function calculateWidth(element, message) {
+                widthElement.innerText = message;
+                let newWidth = widthElement.getBoundingClientRect().width;
+                element.style.width = `${newWidth}px`;
+            }
+
+            function swapMessage() {
+                messageElements.forEach((element, index) => {
+                    let newMessage = getNewMessage(index);
+                    element.style.opacity = 0;
+                    setTimeout(() => {
+                        calculateWidth(element, newMessage);
+                        element.innerHTML = newMessage;
+                    }, 200);
+                    setTimeout(() => {
+                        element.style.opacity = 1;
+                    }, 400);
+                });
+            }
+
+            function getNewMessage(index) {
+                const messagesArray = messages[index];
+                let newMessageIndex = Math.floor(Math.random() * messagesArray.length);
+                while (lastMessageType === newMessageIndex) {
+                    newMessageIndex = Math.floor(Math.random() * messagesArray.length);
+                }
+                lastMessageType = newMessageIndex;
+                return messagesArray[newMessageIndex];
+            }
+
+            setupMessages();
+            setInterval(swapMessage, messageTimer);
+        });
+    </script>
+
+</body>
+
+</html>

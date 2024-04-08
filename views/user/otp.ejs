@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>VintageRags</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="../../static/images/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
+    <link rel="stylesheet" href="../../static/css/magiczoom.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="../static/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/magnific-popup.css">
+    <link rel="stylesheet" href="../static/css/jquery-ui.css">
+    <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+
+
+    <link rel="stylesheet" href="../static/css/aos.css">
+
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        /* Custom CSS for moving the container down */
+        .container {
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="card mx-auto" style="max-width: 400px;">
+            <div class="card-body">
+                <h1 class="card-title text-center mb-4">OTP Verification</h1>
+                <form action="/verifyotp" method="post">
+                    <div class="form-group">
+                        <label for="otp" class="verification-label">Enter your 4-digit OTP:</label>
+                        <input type="text" maxlength="4" id="otp" class="form-control verification-input" name="otp"
+                            required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </form>
+                <% if(expressFlash.otperror && expressFlash.otperror.length> 0){ %>
+                    <div class="alert alert-danger mt-3" role="alert">
+                        <%= expressFlash.otperror %>
+                    </div>
+                    <% } %>
+                        <div class="text-center mt-3">
+                            <form action="/resendotp" method="post" style="display: none;" id="resend-form">
+                                <button type="submit" class="btn btn-danger btn-block" id="verification-resend">Resend
+                                    OTP</button>
+                            </form>
+                            <div id="timer"></div> <!-- Timer div -->
+                        </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        (function startTimer() {
+            timerInterval = setInterval(function () {
+                var expiryTime = '<%= otp.expiry.getTime() %>';
+                var currentTime = new Date().getTime();
+                var timeLeft = Math.round((expiryTime - currentTime) / 1000);
+                document.getElementById('timer').innerHTML = 'OTP Expires in: ' + timeLeft + ' sec';
+
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').innerHTML = '';
+                    document.getElementById('resend-form').style.display = 'block';
+                }
+
+            }, 1000);
+        })()
+
+
+
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
+    <script src="../../static/js/magiczoom.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery-ui.js"></script>
+    <script src="../static/js/owl.carousel.min.js"></script>
+    <script src="../static/js/jquery.magnific-popup.min.js"></script>
+    <script src="../static/js/aos.js"></script>
+
+    <script src="../static/js/main.js"></script>
+
+</body>
+
+</html>

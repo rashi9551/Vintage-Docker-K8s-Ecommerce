@@ -1,0 +1,78 @@
+<%-include('adminHead.ejs') %>
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search..." id="searchInput">
+                    <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                </div>
+            </div>
+            <div class="col-lg-12 mt-4">
+                <div class="table-responsive">
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Order ID</th>
+                                <th>User ID</th>
+                                <th>Products</th>
+                                <th>Return Reason</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(order && order.length> 0) { %>
+                                <% order.forEach(function(data) { %>
+                                    <tr>
+                                        <td>
+                                            <%= data.orderId %>
+                                        </td>
+                                        <td>
+                                            <%= data.userId %>
+                                        </td>
+                                        <td>
+                                            <% data.items.forEach(function(items){ %>
+                                                <%= items.productId.name %>
+                                                    <%= items.quantity %>
+                                                        <br>
+                                                        <% }); %>
+                                        </td>
+                                        <td>
+                                            <%= data.return[0].reason %>
+
+                                        </td>
+                                        <td>
+                                            <% if(data.return[0].status=='Pending' ){ %>
+                                                <div class="equal-btns">
+                                                    <a href="/admin/returnApprove/<%= data._id %>"
+                                                        class="btn btn-outline-success ">Approve</a>
+                                                    <a href="/admin/returnReject/<%= data._id %>"
+                                                        class="btn btn-outline-danger"> Reject </a>
+                                                </div>
+                                                <% }else if(data.return[0].status=='Accepted' ){ %>
+                                                    <span class="text-success">
+                                                        <%= data.return[0].status %>
+                                                    </span>
+                                                    <% }else{ %>
+                                                        <span class="text-danger">
+                                                            <%= data.return[0].status %>
+                                                        </span>
+                                                        <% } %>
+                                        </td>
+
+                                    </tr>
+
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="8">No results found.</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <%-include('adminFooter.ejs') %>

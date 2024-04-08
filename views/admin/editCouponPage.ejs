@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Coupons</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-top: 50px;
+        }
+
+        .form-container h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-panel">
+
+        <div class="container form-container">
+            <h1 class="mb-4">Update Coupon</h1>
+
+            <form action="/admin/updateCoupon" method="post">
+                <div class="mb-3">
+                    <label for="couponCode" class="form-label">Coupon Code:</label>
+                    <input type="text" class="form-control" id="couponCode" name="couponCode"
+                        value="<%=coupon.couponCode%>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="couponType" class="form-label">Coupon Type:</label>
+                    <select class="form-select" id="couponType" name="couponType" value="<%=coupon.type%>"
+                        onchange="updateMaxRedeem()" required>
+                        <option value="flatDiscount">Flat Discount</option>
+                        <option value="percentageDiscount">Percentage Discount</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="minimumPrice" class="form-label">minimumPrice:</label>
+                    <input type="number" class="form-control" id="minimumPrice" name="minimumPrice"
+                        value="<%=coupon.minimumPrice%>" required>
+
+                </div>
+
+                <div class="mb-3">
+                    <label for="discount" class="form-label">Discount:</label>
+                    <input type="number" class="form-control" id="discount" name="discount" oninput="updateMaxRedeem()"
+                        value="<%=coupon.discount%>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="maxRedeem" class="form-label">Max Redeemeable Amount:</label>
+                    <input type="number" class="form-control" id="maxRedeem" name="maxRedeem"
+                        value="<%=coupon.maxRedeem%>" required>
+                </div>
+
+
+
+                <div class="mb-3">
+                    <label for="expiry" class="form-label">Expiry:</label>
+                    <input type="date" class="form-control" id="expiry" name="expiry"
+                        value="<%= new Date(coupon.expiry).toISOString().slice(0, 10) %>" required>
+                </div>
+
+
+                <input type="hidden" id="couponId" name="couponId" value="<%= coupon._id %>">
+
+
+                <button type="submit" class="btn btn-primary">Update Coupon</button>
+            </form>
+        </div>
+
+
+
+
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function validateForm() {
+            var couponCode = document.getElementById('couponCode').value;
+            var minimumPrice = document.getElementById('minimumPrice').value;
+            var discount = document.getElementById('discount').value;
+            var maxRedeem = document.getElementById('maxRedeem').value;
+            var expiry = document.getElementById('expiry').value;
+
+            var couponCodeError = document.getElementById('couponCodeError');
+            var minimumPriceError = document.getElementById('minimumPriceError');
+            var discountError = document.getElementById('discountError');
+            var maxRedeemError = document.getElementById('maxRedeemError');
+            var expiryError = document.getElementById('expiryError');
+
+            couponCodeError.innerHTML = '';
+            minimumPriceError.innerHTML = '';
+            discountError.innerHTML = '';
+            maxRedeemError.innerHTML = '';
+            expiryError.innerHTML = '';
+
+            if (!/^[a-zA-Z0-9]+$/.test(couponCode)) {
+                couponCodeError.innerHTML = 'Coupon code must be alphanumeric without spaces.';
+                return false;
+            }
+
+            if (isNaN(discount) || parseFloat(discount) <= 0) {
+                discountError.innerHTML = 'Discount must be a positive number less than or equal to 100.';
+                return false;
+            }
+
+            if (isNaN(minimumPrice) || parseFloat(minimumPrice) <= 0) {
+                minimumPriceError.innerHTML = 'Minimum price must be a positive number.';
+                return false;
+            }
+
+            if (isNaN(maxRedeem) || parseFloat(maxRedeem) <= 0) {
+                maxRedeemError.innerHTML = 'Max redeemable amount must be a positive number.';
+                return false;
+            }
+
+            return true;
+        }
+
+        function updateMaxRedeem() {
+            var couponType = document.getElementById("couponType").value;
+            var maxRedeemInput = document.getElementById("maxRedeem");
+            var discountInput = document.getElementById("discount");
+
+            if (couponType === "flatDiscount") {
+                var discountAmount = parseFloat(discountInput.value);
+                var minimumPrice = parseFloat(document.getElementById("minimumPrice").value);
+
+                if (discountAmount >= minimumPrice) {
+                    discountInput.value = minimumPrice - 1;
+                }
+                maxRedeemInput.value = parseFloat(discountInput.value);
+                maxRedeemInput.readOnly = true;
+            } else if (couponType === "percentageDiscount") {
+                discountInput.min = 1;
+                discountInput.max = 100;
+                maxRedeemInput.value = "";
+                maxRedeemInput.readOnly = false;
+            }
+        }
+    </script>
+</body>
+
+</html>

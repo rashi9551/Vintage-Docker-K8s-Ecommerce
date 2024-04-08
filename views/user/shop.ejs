@@ -1,0 +1,139 @@
+<%- include ("header.ejs") %>
+  <div class="bg-light py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+            class="text-black">Shop</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-section">
+    <div class="container">
+
+      <div class="row mb-5">
+        <div class="col-md-9 order-2">
+
+          <div class="row">
+            <div class="col-md-12 mb-5">
+              <div class="float-md-left mb-4">
+                <h2 class="text-black h5">Shop All</h2>
+              </div>
+              <div class="d-flex">
+                <div class="dropdown mr-1 ml-md-auto">
+                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuOffset"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Latest
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                    <a class="dropdown-item" href="?sortBy=newArrivals<%= search ? '&search=' + search : '' %>">New
+                      Arrivals</a>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference"
+                    data-toggle="dropdown">Sort By</button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                    <a class="dropdown-item" href="?sortBy=nameAZ<%= search ? '&search=' + search : '' %>">Name, A to
+                      Z</a>
+                    <a class="dropdown-item" href="?sortBy=nameZA<%= search ? '&search=' + search : '' %>">Name, Z to
+                      A</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="?sortBy=priceHigh<%= search ? '&search=' + search : '' %>">Price, low
+                      to high</a>
+                    <a class="dropdown-item" href="?sortBy=priceLow<%= search ? '&search=' + search : '' %>">Price, high
+                      to low</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% if (products.length> 0) { %>
+            <div class="row mb-5">
+              <% products.forEach(product=> { %>
+                <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                  <div class="block-4 text-center border">
+                    <figure class="block-4-image imgsize">
+                      <a href="/shopSingle/<%= product._id %>"><img src="<%= product.image[0] %>"
+                          alt="<%= product.name %>" class="img-fluid"></a>
+                    </figure>
+                    <div class="block-4-text p-4 descript">
+                      <h3><a href="/shopSingle/<%= product._id %>">
+                          <%= product.name %>
+                        </a></h3>
+                      <p class="mb-0">
+                        <%= product.description %>
+                      </p>
+                      <p class="text-primary font-weight-bold my-0" style="line-height: 2; font-size: 18px;">
+                        <span style="text-decoration: line-through;">
+                          <%= product.price %>
+                        </span>&nbsp;
+                        ₹<%= product.discountPrice %>
+                      </p>
+                      <p class="text-primary my-0" style="line-height: 0.5;">
+                        <%= product.discount %>% OFF
+                      </p>
+
+                    </div>
+                  </div>
+                </div>
+                <% }); %>
+            </div>
+            <% } else { %>
+              <div class="alert alert-warning" role="alert">
+                No products found.
+              </div>
+              <% } %>
+
+                <div class="row" data-aos="fade-up">
+                  <div class="col-md-12 text-center">
+                    <div class="site-block-27">
+                      <ul>
+                        <% if (currentPage> 1) { %>
+                          <li><a
+                              href="?page=<%= currentPage - 1 %><%= search ? '&search=' + search : '' %><%= sortBy ? '&sortBy=' + sortBy : '' %><%= categoryId ? '&category=' + categoryId : '' %>">&lt;</a>
+                          </li>
+                          <% } %>
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                              <li <%=currentPage===i ? 'class=active' : '' %>><a
+                                  href="?page=<%= i %><%= search ? '&search=' + search : '' %><%= sortBy ? '&sortBy=' + sortBy : '' %><%= categoryId ? '&category=' + categoryId : '' %>">
+                                  <%= i %>
+                                </a></li>
+                              <% } %>
+                                <% if (currentPage < totalPages) { %>
+                                  <li><a
+                                      href="?page=<%= currentPage + 1 %><%= search ? '&search=' + search : '' %><%= sortBy ? '&sortBy=' + sortBy : '' %><%= categoryId ? '&category=' + categoryId : '' %>">&gt;</a>
+                                  </li>
+                                  <% } %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+        </div>
+
+        <div class="col-md-3 order-1 mb-5 mb-md-0">
+          <div class="border p-4 rounded mb-4">
+            <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
+            <ul class="list-unstyled mb-0">
+              <% categories.forEach(category=> { %>
+                <li class="mb-1">
+                  <a href="/shop?category=<%= category._id %>" class="d-flex">
+                    <span>
+                      <%= category.name %>
+                    </span>
+                    <span class="text-black ml-auto">
+                      (<%= categoryCounts[category._id] || 0 %>)
+                    </span>
+                  </a>
+                </li>
+                <% }); %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include ("footer.ejs") %>

@@ -1,0 +1,114 @@
+<%-include('adminHead.ejs') %>
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search..." id="searchInput">
+                    <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                </div>
+            </div>
+            <div class="col-lg-12 mt-4">
+                <div class="table-responsive">
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>Order ID</th>
+                                <th>User ID</th>
+                                <th>Products</th>
+                                <th>Delivery Address</th>
+                                <th>Payment</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Order Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(order && order.length> 0) { %>
+                                <% order.forEach(function(data) { %>
+                                    <tr>
+                                        <td>
+                                            <%= data.orderId %>
+                                        </td>
+                                        <td>
+                                            <%= data.userId %>
+                                        </td>
+                                        <td>
+                                            <% data.items.forEach(function(item) { %>
+                                                <% if (item.productId && item.productId.name) { %>
+                                                    <%= item.productId.name %>
+                                                        <% } else { %>
+                                                            Product Name Not Available
+                                                            <% } %>
+                                                                <%= item.quantity %>
+                                                                    <br>
+                                                                    <% }); %>
+                                        </td>
+                                        <td>
+                                            <%= data.address[0].save_as %>,
+                                                <%= data.address[0].housename %>,
+                                                    <br>
+                                                    <%= data.address[0].city %>,
+                                                        <%= data.address[0].pincode %>
+                                        </td>
+                                        <td>
+                                            <%= data.payment %>
+                                        </td>
+                                        <td>
+                                            <%= data.amount %>
+                                        </td>
+                                        <td>
+                                            <form action="/admin/updateOrderStatus" method="post"
+                                                id="orderStatusForm_<%= data._id %>">
+                                                <input type="hidden" name="orderId" value="<%= data._id %>">
+                                                <label for="status"></label>
+
+                                                <% if(data.status==='paymentPending' ) {%>
+                                                    <span class="text-danger">PaymentPending</span>
+                                                    <% }else if(data.status==='Cancelled' ) {%>
+                                                        <span>Cancelled</span>
+                                                        <% }else if(data.status=='returned' ){ %>
+                                                            <span>Returned</span>
+                                                            <% }else{ %>
+                                                                <select name="status" id="status"
+                                                                    onchange="submitForm('<%= data._id %>')">
+                                                                    <% const statuses=['pending', 'processing'
+                                                                        , 'shipped' , 'delivered'
+                                                                        ,'Cancelled','returned']; %>
+                                                                        <% for (const status of statuses) { %>
+                                                                            <option value="<%= status %>"
+                                                                                <%=data.status===status ? 'selected'
+                                                                                : '' %>><%=
+                                                                                    status.charAt(0).toUpperCase() +
+                                                                                    status.slice(1) %>
+                                                                            </option>
+                                                                            <% } %>
+                                                                </select>
+                                                                <% } %>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <%= data.createdAt.toLocaleString('en-US', { year: 'numeric' ,
+                                                month: 'short' , day: 'numeric' , hour: 'numeric' , minute: 'numeric' ,
+                                                second: 'numeric' , hour12: false }) %>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="8">No results found.</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function submitForm(orderId) {
+            document.getElementById(`orderStatusForm_${orderId}`).submit();
+        }
+    </script>
+
+
+    <%-include('adminFooter.ejs') %>

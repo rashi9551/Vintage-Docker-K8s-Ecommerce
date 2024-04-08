@@ -1,0 +1,192 @@
+<%- include('adminHead.ejs') %>
+    <style>
+        .btn-option {
+            border: 1px solid #4285F4;
+            color: #4285F4;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .btn-option.active {
+            background-color: #4285F4;
+            color: #fff;
+            border-color: #000000;
+        }
+
+        .btn-option:hover {
+            background-color: #4285F4;
+            color: #fff;
+            border-color: #000000;
+        }
+    </style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn  btn-option active" data-page="page1">Best Selling Products</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn  btn-option" data-page="page2">Best Selling Categories</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn  btn-option" data-page="page3">Worst Selling Products</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div id="page1" class="page-content">
+            <div class="table-responsive">
+                <% if(bestProducts !="" ) { %>
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>SR.NO.</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Total Sold</th>
+                                <th>Stock Left</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% bestProducts.forEach((row,index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index+1 %>
+                                    </td>
+                                    <td>
+                                        <img src="/<%= row.productImage[0] %>" width="55" class="img-thumbnail"
+                                            alt="image">
+                                    </td>
+                                    <td>
+                                        <%= row.productName %>
+                                    </td>
+                                    <td>
+                                        <%= row.productCategory %>
+                                    </td>
+                                    <td>
+                                        <%= row.totalSold %>
+                                    </td>
+                                    <td>
+                                        <%= row.stockLeft %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <h1 class="text-center text-secondary mt-5">No Product found in the database
+                        </h1>
+                        <% } %>
+            </div>
+
+        </div>
+        <div id="page2" class="page-content" style="display: none;">
+            <div class="table-responsive">
+                <% if(bestCategories !="" ) { %>
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>SR.NO.</th>
+                                <th>Name</th>
+                                <th>Total Sold (Number of Orders)</th>
+                                <th>Numeber of Products Sold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% bestCategories.forEach((row,index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index+1 %>
+                                    </td>
+                                    <td>
+                                        <%= row._id %>
+                                    </td>
+                                    <td>
+                                        <%= row.totalSold %>
+                                    </td>
+                                    <td>
+                                        <%= row.numProducts %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <h1 class="text-center text-secondary mt-5">No Product found in the database
+                        </h1>
+                        <% } %>
+            </div>
+
+        </div>
+        <div id="page3" class="page-content" style="display: none;">
+            <div class="table-responsive">
+                <% if(worstProducts !="" ) { %>
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>SR.NO.</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Total Sold</th>
+                                <th>Stock Left</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% worstProducts.forEach((row,index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index+1 %>
+                                    </td>
+                                    <td>
+                                        <img src="/<%= row.productImage[0] %>" width="55" class="img-thumbnail"
+                                            alt="image">
+                                    </td>
+                                    <td>
+                                        <%= row.productName %>
+                                    </td>
+                                    <td>
+                                        <%= row.productCategory %>
+                                    </td>
+                                    <td>
+                                        <%= row.totalSold %>
+                                    </td>
+                                    <td>
+                                        <%= row.stockLeft %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <h1 class="text-center text-secondary mt-5">No Product found in the database
+                        </h1>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.btn-option');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const selectedPage = this.getAttribute('data-page');
+
+                document.querySelectorAll('.page-content').forEach(page => {
+                    page.style.display = 'none';
+                });
+
+                document.getElementById(selectedPage).style.display = 'block';
+
+                // Add active class to the clicked button
+                buttons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+
+    <%- include('adminFooter.ejs') %>

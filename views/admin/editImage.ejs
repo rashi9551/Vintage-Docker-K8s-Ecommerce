@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../static/admin/css/styles.min.css" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .center-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      max-width: 500px;
+      /* Adjust as needed */
+      width: 100%;
+    }
+
+    .image-button-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      /* Adjust as needed */
+    }
+
+    .image-button-container img {
+      width: 100px;
+      height: 100px;
+      margin-right: 10px;
+      /* Adjust as needed */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-panel">
+    <div class="center-container">
+      <div class="container form-container">
+        <h1 class="mb-4">Update product Images</h1>
+        <% if(imageNotFound && imageNotFound.length> 0) { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>
+              <%= imageNotFound %>
+            </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <% } %>
+            <form action="/admin/updateImage/<%= product._id %>" method="post" enctype="multipart/form-data">
+              <% product.image.forEach(item=>{ %>
+                <div class="image-button-container">
+                  <img src="/<%= item %>">
+                  <div>
+                    <a href="/admin/deleteImage?pid=<%= product._id %>&filename=<%= item %>"
+                      class="btn btn-danger btn-xs">Delete</a>
+                    <a href="/admin/resizeimg?pid=<%= product._id %>&filename=<%= item %>"
+                      class="btn btn-primary btn-xs">Resize</a>
+                  </div>
+                </div>
+                <% }) %>
+                  <div class="mb-3">
+                    <label for="image" class="form-label">Add New Images:</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*" multiple>
+                  </div>
+                  <div id="imagePreview"></div>
+                  <button type="submit" class="btn btn-primary">Save Image</button>
+            </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById("image").addEventListener("change", function () {
+      var files = this.files;
+      var imagePreview = document.getElementById("imagePreview");
+
+      imagePreview.innerHTML = "";
+
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          var img = document.createElement("img");
+          img.src = e.target.result;
+          img.style.maxWidth = "100px";
+          img.style.maxHeight = "100px";
+          img.style.marginRight = "10px";
+          img.style.marginBottom = "10px";
+          imagePreview.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+  <!-- Bootstrap JS -->
+  <script src="../../static/admin/libs/jquery/dist/jquery.min.js"></script>
+  <script src="../../static/admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

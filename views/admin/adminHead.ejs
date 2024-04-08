@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vintagerags-admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="../../static/images/logo.png" />
+  <link rel="stylesheet" href="../../static/admin/css/styles.min.css" />
+  <style>
+    .equal-btns {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .equal-btns .btn {
+      flex: 0.45;
+    }
+  </style>
+
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="/admin/adminPanel" class="js-logo-clone" style="font-size: 37px;">VintageRags</a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Home</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/adminPanel" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/users" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Customers</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/products" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Products</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/categories" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Categories</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/orders" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Orders</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/orderReturn" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Order Returns</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/coupons" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Coupons</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/best" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Best / Worst</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <div class="message-body">
+                <a href="/admin/adLogout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <div class="body-wrapper">

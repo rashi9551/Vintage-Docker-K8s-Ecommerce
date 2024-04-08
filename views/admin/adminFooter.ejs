@@ -1,0 +1,34 @@
+</div>
+<script>
+    function confirmUnlist(itemId) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure you want to proceed?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            dangerMode: true,
+        })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/admin/unlist/" + itemId;
+                } else {
+                    console.log("User canceled");
+                }
+            });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="../../static/admin/libs/jquery/dist/jquery.min.js"></script>
+<script src="../../static/admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../static/admin/js/sidebarmenu.js"></script>
+<script src="../../static/admin/js/app.min.js"></script>
+<script src="../../static/admin/libs/apexcharts/dist/apexcharts.min.js"></script>
+<script src="../../static/admin/libs/simplebar/dist/simplebar.js"></script>
+<script src='../../static/admin/js/dashboard.js'></script>
+</body>
+
+</html>

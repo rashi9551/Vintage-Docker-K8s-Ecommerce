@@ -1,0 +1,407 @@
+<%-include('adminHead.ejs') %>
+  <style>
+    .excel {
+      margin-left: -120px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .container-fluid {
+      padding: 20px;
+    }
+
+    .flot-chart-wrapper {
+      margin-bottom: 30px;
+    }
+
+    .timeline-widget .timeline-item {
+      margin-bottom: 20px;
+    }
+
+    .timeline-time {
+      font-size: 14px;
+    }
+
+    .timeline-desc {
+      font-size: 18px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+  </style>
+
+  <div class="container-fluid">
+    <form action="/admin/downloadsales" method="post" class="mb-3">
+      <div class="row align-items-end">
+        <div class="col-md-3 mb-3">
+          <label for="startDate" class="form-label">Start Date:</label>
+          <input type="date" id="startDate" name="startDate" class="form-control" placeholder="Start Date">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label for="endDate" class="form-label">End Date:</label>
+          <input type="date" id="endDate" name="endDate" class="form-control" placeholder="End Date">
+        </div>
+        <div class="col-md-3 mb-3">
+          <button type="submit" name="submitBtn" value="pdf" class="btn btn-primary btn-block mt-3">
+            Download Pdf
+          </button>
+        </div>
+        <div class="col-md-3 mb-3">
+          <button type="submit" name="submitBtn" value="excel" class="btn btn-primary btn-block excel">
+            Download Excel
+          </button>
+        </div>
+      </div>
+    </form>
+
+
+    <% if(derror&&derror.length>0){ %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        <strong>
+          <%= derror %>
+        </strong>
+      </div>
+      <% } %>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <div class="row alig n-items-start">
+                  <div class="col-8">
+                    <h5 class="card-title mb-9 fw-semibold"> Total Orders </h5>
+                    <h4 class="fw-semibold mb-3">
+                      <%= orders[0].totalOrders %> Orders
+                    </h4>
+                    <div class="d-flex align-items-center pb-1">
+                      <span
+                        class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
+                        <i class="ti ti-arrow-down-right text-danger"></i>
+                      </span>
+                      <p class="text-dark me-1 fs-3 mb-0">+9%</p>
+                      <p class="fs-3 mb-0">last year</p>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end">
+                      <div
+                        class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-shopping-cart"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <div class="row alig n-items-start">
+                  <div class="col-8">
+                    <h5 class="card-title mb-9 fw-semibold"> Total Earnings </h5>
+                    <h4 class="fw-semibold mb-3">₹<%= orders[0].totalAmount %>
+                    </h4>
+                    <div class="d-flex align-items-center pb-1">
+                      <span
+                        class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
+                        <i class="ti ti-arrow-down-right text-danger"></i>
+                      </span>
+                      <p class="text-dark me-1 fs-3 mb-0">+9%</p>
+                      <p class="fs-3 mb-0">last year</p>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end">
+                      <div
+                        class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                        <i class="ti ti-currency-rupee fs-6"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <div class="row alig n-items-start">
+                  <div class="col-8">
+                    <h5 class="card-title mb-9 fw-semibold"> Total Discounts </h5>
+                    <h4 class="fw-semibold mb-3">₹<%= totalDiscountSum %>
+                    </h4>
+                    <div class="d-flex align-items-center pb-1">
+                      <span
+                        class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
+                        <i class="ti ti-arrow-down-right text-danger"></i>
+                      </span>
+                      <p class="text-dark me-1 fs-3 mb-0">+9%</p>
+                      <p class="fs-3 mb-0">last year</p>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="d-flex justify-content-end">
+                      <div
+                        class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                        <i class="ti ti-currency-rupee fs-6"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body p-4">
+                <h5 class="card-title fw-bold mb-4">Order Details</h5>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped mb-0">
+                    <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Image</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Product Name</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Total Sold</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Total Price</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Total Discount</h6>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% products.forEach(product=> { %>
+                        <tr>
+                          <td class="border-bottom-0">
+                            <img src="/<%= product.productImage[0] %>" width="55" class="img-thumbnail" alt="image">
+                          </td>
+                          <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-1">
+                              <%= product.productName %>
+                            </h6>
+                          </td>
+                          <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">
+                              <%= product.totalSold %>
+                            </p>
+                          </td>
+                          <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0 fs-4">₹<%= product.totalPrice %>
+                            </h6>
+                          </td>
+                          <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0 fs-4">₹<%= product.totalDiscount %>
+                            </h6>
+                          </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center mt-3">
+                    <% if (currentPage> 1) { %>
+                      <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <% } %>
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                          <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= i %>">
+                              <%= i %>
+                            </a>
+                          </li>
+                          <% } %>
+                            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                              <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  <div class="container">
+    <div class="row my-3">
+      <div class="col-sm-12">
+        <div class="flot-chart-wrapper text-dark">
+          <label for="selectType" class="form-label">Select the Chart Type:</label>
+          <select id="selectType" onchange="updateChart(this)" class="form-select mb-3">
+            <option value="" disabled selected>Select</option>
+            <option value="month">Monthly</option>
+            <option value="year">Yearly</option>
+          </select>
+          <div class="flot-chart" id="flotChart">
+            <canvas id="chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-sm-12">
+        <div class="flot-chart-wrapper">
+          <div class="flot-chart" id="flotChart2">
+            <canvas id="chart2"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    document.getElementById('startDate').setAttribute('placeholder', 'Start Date');
+    document.getElementById('endDate').setAttribute('placeholder', 'End Date');
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function getMonthName(month) {
+      const monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ];
+      return monthNames[month - 1];
+    }
+
+    async function updateChart(select) {
+      const selected = select.value;
+      console.log(selected);
+      try {
+        const response = await fetch('/admin/chartData', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            selected: selected
+          })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          chart(data, selected);
+        } else {
+          console.error('Error fetching chart data:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching chart data:', error);
+      }
+    }
+
+    function chart(data, selected) {
+      console.log("hghhgh", data);
+      data.sales.sort((a, b) => a._id.month - b._id.month || a._id.year - b._id.year);
+      data.order.sort((a, b) => a._id.month - b._id.month || a._id.year - b._id.year);
+
+      if (window.myChart) {
+        window.myChart.destroy();
+      }
+      if (window.stackedBar2) {
+        window.stackedBar2.destroy();
+      }
+
+      const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ];
+
+      const labelsSales = [];
+      const dataSales = [];
+      const labelsOrders = [];
+      const dataOrders = [];
+
+      if (selected === 'month') {
+        for (let i = 0; i < 12; i++) {
+          const monthDataSales = data.sales.find(entry => entry._id.month === i + 1);
+          labelsSales.push(months[i]);
+          dataSales.push(monthDataSales ? monthDataSales.totalAmount : 0);
+
+          const monthDataOrders = data.order.find(entry => entry._id.month === i + 1);
+          labelsOrders.push(months[i]);
+          dataOrders.push(monthDataOrders ? monthDataOrders.count : 0);
+        }
+      } else if (selected === 'year') {
+        const years = Array.from(new Set([...data.sales.map(entry => entry._id.year), ...data.order.map(entry => entry._id.year)]));
+        years.sort((a, b) => a - b);
+        for (const year of years) {
+          const yearDataSales = data.sales.find(entry => entry._id.year === year);
+          labelsSales.push(year.toString());
+          dataSales.push(yearDataSales ? yearDataSales.totalAmount : 0);
+
+          const yearDataOrders = data.order.find(entry => entry._id.year === year);
+          labelsOrders.push(year.toString());
+          dataOrders.push(yearDataOrders ? yearDataOrders.count : 0);
+        }
+      }
+
+      const ctx = document.getElementById('chart').getContext('2d');
+      window.myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labelsSales,
+          datasets: [{
+            label: 'Total Sales',
+            data: dataSales,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      const ctl2 = document.getElementById('chart2').getContext('2d');
+      window.stackedBar2 = new Chart(ctl2, {
+        type: 'bar',
+        data: {
+          labels: labelsOrders,
+          datasets: [{
+            label: 'Number of Orders',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 20)',
+            borderWidth: 1,
+            data: dataOrders
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+
+  </script>
+  <%-include('adminFooter.ejs') %>

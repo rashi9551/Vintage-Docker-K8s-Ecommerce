@@ -1,0 +1,205 @@
+<%- include ("header.ejs") %>
+
+  <div class="bg-light py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-0">
+          <a href="/">Home</a> <span class="mx-2 mb-0">/</span>
+          <strong class="text-black">
+            <%= productOne.name %>
+          </strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div id="productSlider" class="product-slider">
+            <% productOne.image.forEach((image, index)=> { %>
+              <div class="slide <%= index === 0 ? 'active' : '' %>">
+                <a href="/<%= image %>" class="MagicZoom" id="Mag" style="width: 80%; height: auto;">
+                  <img src="/<%= image %>" alt="<%= productOne.name %> Image" class="img-fluid productImage" />
+                </a>
+              </div>
+              <% }); %>
+          </div>
+          <div class="position-absolute bottom-0 start-50 translate-middle-x" style="left: calc(50% - 120px);">
+            <div class="d-flex justify-content-center">
+              <div class="rounded-circle bg-white p-2 mr-3">
+                <button class="btn btn-link" type="button" onclick="prevSlide()">
+                  <i class="fas fa-arrow-left text-primary"></i>
+                </button>
+              </div>
+              <div class="rounded-circle bg-white p-2">
+                <button class="btn btn-link" type="button" onclick="nextSlide()">
+                  <i class="fas fa-arrow-right text-primary"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <h2 class="text-black">
+            <%= productOne.name %>
+          </h2>
+          <p>
+            <%= productOne.description %>
+          </p>
+          <span id="ratingContainer" class="rating-container">
+            <span class="rating">
+              <span
+                style="font-family: Arial, Helvetica, sans-serif; font-weight: 400; color: #000;">&nbsp;3.7</span>&nbsp;<span
+                class="green-star">★</span>&nbsp;<span id="avgrating"></span>&nbsp;<span>1.8k Ratings&nbsp;</span>
+            </span>
+          </span>
+          <hr>
+          <p><strong class="rateMain">₹<%= productOne.discountPrice %></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="rate">MRP.</span>&nbsp;&nbsp;&nbsp;<span class="rate"
+              style="text-decoration: line-through;color: #857b79;">₹<%= productOne.price%>
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="rateOff">(<%= productOne.discount%>% OFF)</span><br><span
+              style="font-weight: 300;color: rgb(11, 215, 157);">inclusive of all taxes</span></p>
+          <form id="addToCartForm" onsubmit="return addToCart(event);" method="post"
+            action="/addtoCart/<%= productOne._id %>">
+
+            <div class="mb-4">
+              <!-- Size selection buttons -->
+              <div class="btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-outline-primary size-btn">
+                  <input type="radio" name="size" id="sizeXS" value="XS" autocomplete="off"> XS
+                </label>
+                <label class="btn btn-outline-primary size-btn">
+                  <input type="radio" name="size" id="sizeS" value="S" autocomplete="off"> S
+                </label>
+                <label class="btn btn-outline-primary size-btn">
+                  <input type="radio" name="size" id="sizeM" value="M" autocomplete="off"> M
+                </label>
+                <label class="btn btn-outline-primary size-btn">
+                  <input type="radio" name="size" id="sizeL" value="L" autocomplete="off"> L
+                </label>
+                <label class="btn btn-outline-primary size-btn">
+                  <input type="radio" name="size" id="sizeXL" value="XL" autocomplete="off"> XL
+                </label>
+              </div>
+            </div>
+
+            <% if(pass&&pass.length>0){%>
+              <div style="color: red; font-size: 16px; font-weight: bold;">
+                <%= pass%>
+              </div>
+                  <%}%>
+                <div class="d-flex align-items-center flex-column flex-md-row mb-4">
+                  <button type="submit" class="btn btn-primary mb-2 mb-md-0 mr-md-2 btn-block">
+                    <span class="fas fa-shopping-cart"></span> Add to Cart
+                  </button>
+                  <a id="addToWishlistBtn" class="btn btn-primary wishlist-btn mt-2 mt-md-0 btn-block" href="#">
+                    <span class="fas fa-heart"></span> Add to Wishlist
+                  </a>
+                </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-section block-3 site-blocks-2 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-7 site-section-heading text-center pt-4">
+          <h2>Related Products</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="nonloop-block-3 owl-carousel">
+            <% products.forEach(product=> { %>
+              <div class="item">
+                <a href="/shopSingle/<%= product._id %>">
+                  <div class="block-4 text-center">
+                    <figure class="block-4-image">
+                      <img src="/<%= product.image[0] %>" alt="Image placeholder" class="img-fluid">
+                    </figure>
+                    <div class="block-4-text p-4">
+                      <h3><a href="/shopSingle/<%= product._id %>">
+                          <%= product.name %>
+                        </a></h3>
+                      <p class="mb-0">
+                        <%= product.description %>
+                      </p>
+                      <p class="text-primary font-weight-bold my-0" style="line-height: 2; font-size: 18px;">
+                        <span style="text-decoration: line-through;">
+                          <%= product.price %>
+                        </span>&nbsp;
+                        ₹<%= product.discountPrice %>
+                      </p>
+                      <p class="text-primary my-0" style="line-height: 0.5;">
+                        <%= product.discount %>% OFF
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('addToWishlistBtn').addEventListener('click', function (event) {
+      event.preventDefault();
+
+      var productId = '<%= productOne._id %>';
+      var selectedSize = document.querySelector('input[name="size"]:checked');
+
+      if (!selectedSize) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please select a size.',
+        });
+        return;
+      }
+
+      var sizeValue = selectedSize.value;
+      var url = '/addtofavourites/<%= productOne._id %>';
+
+      url += '?size=' + encodeURIComponent(sizeValue);
+
+      window.location.href = url;
+    });
+  </script>
+
+  <script>
+    document.getElementById("addToCartForm").addEventListener("submit", function (event) {
+      if (!addToCart()) {
+        event.preventDefault();
+      }
+    });
+    function addToCart() {
+      var sizes = document.getElementsByName("size");
+      var sizeSelected = false;
+      for (var i = 0; i < sizes.length; i++) {
+        if (sizes[i].checked) {
+          sizeSelected = true;
+          break;
+        }
+      }
+
+      if (!sizeSelected) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please select a size.',
+        });
+        return false;
+      }
+      return true;
+    }
+  </script>
+
+  <%- include ("footer.ejs") %>

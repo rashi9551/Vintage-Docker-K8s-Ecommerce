@@ -1,0 +1,70 @@
+<%- include ("header.ejs") %>
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="/profile">User</a>
+                <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Coupons</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        <% if (locals.coupons && locals.coupons !== null) { %>
+            <% coupons.forEach(function(data) { %>
+                <div class="col">
+                    <div class="card border border-primary text-black">
+                        <div class="card-header text-center border border-primary">
+                            <h5 class="card-title text-primary"><%= data.couponCode %></h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Type:</strong> <%= data.type %></p>
+                            <p class="card-text"><strong>Minimum Price:</strong> <%= data.minimumPrice %></p>
+                            <p class="card-text"><strong>Discount:</strong>
+                                <% if(data.type == 'flatDiscount') { %>
+                                    ₹<%= data.discount %>
+                                <% } %>
+                                <% if(data.type == 'percentageDiscount') { %>
+                                    <%= data.discount %>%
+                                <% } %>
+                            </p>
+                            
+                            <p class="card-text"><strong>Max Redeemable:</strong> <%= data.maxRedeem %></p>
+                            <p class="card-text"><strong>Expiry:</strong> <%= data.expiry.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) %></p>
+                        </div>
+                        <div class="card-footer border border-primary text-center">
+                            <button class="btn btn-outline-primary" onclick="copyCouponCode('<%= data.couponCode %>')">Copy Coupon Code</button>
+                        </div>                        
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col">
+                <div class="alert alert-info" role="alert">
+                    No coupons available.
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+<script>
+    function copyCouponCode(code) {
+        var tempInput = document.createElement("input");
+        tempInput.value = code;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        Swal.fire({
+            icon: 'success',
+            title: 'Coupon Code Copied!',
+            text: 'Coupon code ' + code + ' has been copied to the clipboard.',
+        });
+    }
+</script>
+
+    
+<%- include ("footer.ejs") %>

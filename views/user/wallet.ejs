@@ -1,0 +1,153 @@
+<%- include ("header.ejs") %>
+    <style>
+        .border-success {
+            border-color: #049827 !important;
+            /* Green border color */
+        }
+
+        .border-danger {
+            border-color: #db0116 !important;
+            /* Red border color */
+        }
+    </style>
+    <div class="bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0">
+                    <a href="/profile">User</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black">Wallet</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Wallet History</h1>
+        <h4 class="mb-4 text-center">Balance: ₹<%= user.wallet %>
+        </h4>
+        <form id="Form" class="mb-4">
+            <div class="input-group">
+                <input type="number" id="Amount" name="Amount" class="form-control" placeholder="Enter Amount" min="0">
+                <button class="btn btn-primary" onclick="RazorpayWallet(event)">Add To Wallet</button>
+            </div>
+        </form>
+        <% if(wallet && wallet.length> 0) { %>
+            <div class="row">
+                <% wallet.forEach((entry, index)=> { %>
+                    <div class="col-md-6 mb-4">
+                        <div
+                            class="card  <%= entry.history.transaction === 'Credited' ? 'border border-success' : 'border border-danger'; %>">
+                            <div class="card-body">
+                                <h5
+                                    class="card-title font-weight-bold  <%= entry.history.transaction === 'Credited' ? 'text-success' : 'text-danger'; %>">
+                                    <%= entry.history.transaction %>
+                                </h5>
+
+
+                                <p class="card-text text-black">Reason: <%= entry.history.reason %>
+                                </p>
+                                <p class="card-text text-black">Amount: ₹<%= entry.history.amount %>
+                                </p>
+                                <p class="card-text text-black">Date: <%= new Date(entry.history.date).toLocaleString()
+                                        %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <% if((index + 1) % 2===0 && (index + 1) !==wallet.length) { %>
+            </div>
+            <div class="row">
+                <% } %>
+                    <% }); %>
+            </div>
+            <% } else { %>
+                <p class="text-center">No history available.</p>
+                <% } %>
+    </div>
+
+
+    <script>
+        async function RazorpayWallet() {
+            event.preventDefault()
+            console.log("ivide function");
+            let amountToPay = document.getElementById('Amount').value
+            console.log(amountToPay);
+            if (!amountToPay) {
+                Swal.fire({
+                    text: 'please enter an amount',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        title: 'text-danger',
+                        popup: 'swal2-popup-custom',
+                        confirmButton: 'btn btn-danger'
+                    },
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    showLoaderOnConfirm: false,
+                    timer: 3000
+                });
+
+            }
+
+
+
+            else {
+                console.log("upi total", "ppppppp");
+                var options = {
+                    key: 'rzp_test_IjovpkTeb85bN5',
+                    amount: amountToPay * 100,
+                    currency: "INR",
+                    name: "VintageRags",
+                    description: "Test Transaction",
+                    image: "https://i.ibb.co/6sgJyMz/logo.png",
+                    order_id: orderId,
+                    handler: function (response) {
+                        // alert(response.razorpay_payment_id);
+                        document.getElementById("Form").method = "post";
+                        document.getElementById("Form").action = "/walletTopup";
+                        document.getElementById("Form").submit();
+                    },
+
+                    theme: {
+                        color: "#4285F4",
+                    },
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.on("payment.failed", function (response) {
+                    alert(response.error.code);
+                    alert(response.error.description);
+                    alert(response.error.source);
+                    alert(response.error.step);
+                    alert(response.error.reason);
+                    alert(response.error.metadata.payment_id);
+                });
+                rzp1.open();
+
+                event.preventDefault();
+
+                var orderId;
+                $(document).ready(function () {
+                    var settings = {
+                        url: "/walletcreate/orderId",
+                        method: "POST",
+                        timeout: 0,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: JSON.stringify({
+                            amount: amountToPay * 100,
+                        }),
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                        orderId = response.orderId;
+                        console.log(orderId);
+                        $("button").show();
+                    });
+                });
+            }
+        }
+
+    </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <%- include ("footer.ejs") %>

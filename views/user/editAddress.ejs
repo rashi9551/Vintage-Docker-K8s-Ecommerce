@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>VintageRags</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="../../static/images/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
+    <link rel="stylesheet" href="../../static/css/magiczoom.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="../static/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/magnific-popup.css">
+    <link rel="stylesheet" href="../static/css/jquery-ui.css">
+    <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+
+
+    <link rel="stylesheet" href="../static/css/aos.css">
+
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+    <section class="profile-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-4">Edit Address</h2>
+                            <form id="addressForm" action="/addressUpdated/<%= adress.address._id %>" method="post">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Name:</label>
+                                        <input type="text" id="name" name="name" class="form-control" required
+                                            value="<%= adress.address.name %>">
+                                        <span id="nameError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="mobile" class="form-label">Mobile No:</label>
+                                        <input type="tel" id="mobile" name="mobile" class="form-control" required
+                                            value="<%= adress.address.mobile %>">
+                                        <span id="mobileError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">E-mail:</label>
+                                        <input type="email" id="email" name="email" class="form-control" required
+                                            value="<%= adress.address.email %>">
+                                        <span id="emailError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="housename" class="form-label">House Name:</label>
+                                        <input type="text" id="housename" name="housename" class="form-control" required
+                                            value="<%= adress.address.housename %>">
+                                        <span id="housenameError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="street" class="form-label">Street:</label>
+                                        <input type="text" id="street" name="street" class="form-control" required
+                                            value="<%= adress.address.street %>">
+                                        <span id="streetError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="city" class="form-label">City:</label>
+                                        <input type="text" id="city" name="city" class="form-control" required
+                                            value="<%= adress.address.city %>">
+                                        <span id="cityError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="state" class="form-label">State:</label>
+                                        <input type="text" id="state" name="state" class="form-control" required
+                                            value="<%= adress.address.state %>">
+                                        <span id="stateError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="country" class="form-label">Country:</label>
+                                        <input type="text" id="country" name="country" class="form-control" required
+                                            value="<%= adress.address.country %>">
+                                        <span id="countryError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="pincode" class="form-label">Pincode:</label>
+                                        <input type="text" id="pincode" pattern="\d{6}"
+                                            title="Please enter a 6-digit PIN code" name="pincode" class="form-control"
+                                            required value="<%= adress.address.pincode %>">
+                                        <span id="pincodeError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="saveas" class="form-label">Save Name:</label>
+                                        <input type="text" id="saveas" name="saveas" class="form-control"
+                                            placeholder="eg: Home Address" value="<%= adress.address.save_as %>">
+                                        <span id="saveasError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button id="saveChangesButton" class="btn btn-success mt-3">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+        function validateAddress() {
+            var errors = '';
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var mobile = document.getElementById('mobile').value;
+            var housename = document.getElementById('housename').value;
+            var street = document.getElementById('street').value;
+            var pincode = document.getElementById('pincode').value;
+            var city = document.getElementById('city').value;
+            var state = document.getElementById('state').value;
+            var country = document.getElementById('country').value;
+
+            var nameError = document.getElementById('nameError');
+            var emailError = document.getElementById('emailError');
+            var mobileError = document.getElementById('mobileError');
+            var housenameError = document.getElementById('housenameError');
+            var streetError = document.getElementById('streetError');
+            var pincodeError = document.getElementById('pincodeError');
+            var cityError = document.getElementById('cityError');
+            var stateError = document.getElementById('stateError');
+            var countryError = document.getElementById('countryError');
+
+            nameError.innerHTML = '';
+            emailError.innerHTML = '';
+            mobileError.innerHTML = '';
+            housenameError.innerHTML = '';
+            streetError.innerHTML = '';
+            pincodeError.innerHTML = '';
+            cityError.innerHTML = '';
+            stateError.innerHTML = '';
+            countryError.innerHTML = '';
+
+            if (!name) {
+                nameError.innerHTML = 'Name is required.';
+                errors += 'Name is required.\n';
+            }
+            if (!email) {
+                emailError.innerHTML = 'Email is required.';
+                errors += 'Email is required.\n';
+            } else if (!email.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+                emailError.innerHTML = 'Invalid email address.';
+                errors += 'Invalid email address.\n';
+            }
+            if (!mobile) {
+                mobileError.innerHTML = 'Mobile number is required.';
+                errors += 'Mobile number is required.\n';
+            } else if (!mobile.match(/^\d{10}$/)) {
+                mobileError.innerHTML = 'Invalid mobile number.';
+                errors += 'Invalid mobile number.\n';
+            }
+            if (!housename) {
+                housenameError.innerHTML = 'House name/Flat no is required.';
+                errors += 'House name/Flat no is required.\n';
+            }
+            if (!street) {
+                streetError.innerHTML = 'Street is required.';
+                errors += 'Street is required.\n';
+            }
+            if (!pincode) {
+                pincodeError.innerHTML = 'Pincode is required.';
+                errors += 'Pincode is required.\n';
+            } else if (!pincode.match(/^\d{6}$/)) {
+                pincodeError.innerHTML = 'Invalid pincode.';
+                errors += 'Invalid pincode.\n';
+            }
+            if (!city) {
+                cityError.innerHTML = 'City is required.';
+                errors += 'City is required.\n';
+            }
+            if (!state) {
+                stateError.innerHTML = 'State is required.';
+                errors += 'State is required.\n';
+            }
+            if (!country) {
+                countryError.innerHTML = 'Country is required.';
+                errors += 'Country is required.\n';
+            }
+
+            if (errors) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        document.getElementById('addressForm').addEventListener('submit', function (event) {
+            // Prevent form submission if validation fails
+            if (!validateAddress()) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
+    <script src="../../static/js/magiczoom.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery-ui.js"></script>
+    <script src="../static/js/owl.carousel.min.js"></script>
+    <script src="../static/js/jquery.magnific-popup.min.js"></script>
+    <script src="../static/js/aos.js"></script>
+
+    <script src="../static/js/main.js"></script>
+
+</body>
+
+</html>

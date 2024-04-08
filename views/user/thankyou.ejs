@@ -1,0 +1,125 @@
+<%- include ("header.ejs") %>
+
+  <div class="bg-light py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-0">
+          <a href="index.html">Home</a>
+          <span class="mx-2 mb-0">/</span>
+          <strong class="text-black">Contact</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="order_details section_gap">
+    <div class="container">
+      <% if(order.payment=="paymentPending" ){ %>
+        <h2 class="title_confirmation mb-4 text-danger">
+          You Order is Pending due to Unfinished Payment.
+        </h2>
+        <% }else{ %>
+          <h2 class="title_confirmation mb-4 text-success">
+            Thank you. Your order has been received.
+          </h2>
+          <% } %>
+            <div class="row order_d_inner text-black">
+              <div class="col-lg-6">
+                <div class="details_item">
+                  <h4>Order Info</h4>
+                  <ul class="list-unstyled">
+                    <li>
+                      <span>Order Id</span>: <%= order.orderId %>
+                    </li>
+                    <li>
+                      <span>Date</span>:
+                      <%= order.createdAt.toLocaleString('en-US', { year: 'numeric' , month: 'short' , day: 'numeric' ,
+                        hour: '2-digit' , minute: '2-digit' }) %>
+                    </li>
+                    <li>
+                      <span>Total</span>: <%= order.amount %>
+                    </li>
+                    <li>
+                      <span>Payment Method</span>: <%= order.payment %>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="details_item">
+                  <h4>Shipping Address</h4>
+                  <ul class="list-unstyled">
+                    <li>
+                      <span>House Name</span>: <%= order.address[0].housename %>
+                    </li>
+                    <li>
+                      <span>Street</span>: <%= order.address[0].street %>
+                    </li>
+                    <li>
+                      <span>City</span>: <%= order.address[0].city %>
+                    </li>
+                    <li>
+                      <span>Country</span>: <%= order.address[0].country %>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="order_details_table mt-4 text-black">
+              <h2>Invoice</h2>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Product</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% order.items.forEach(item=> { %>
+                      <tr>
+                        <td>
+                          <%= item.productId.name %>
+                        </td>
+                        <td>x <%= item.quantity %>
+                        </td>
+                        <td>
+                          <%= item.quantity * item.price %>
+                        </td>
+                      </tr>
+                      <% }) %>
+
+                        <tr>
+                          <td colspan="2">
+                            <h4>Subtotal</h4>
+                          </td>
+                          <td>
+                            <%= order.amount %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">
+                            <h4>Total</h4>
+                          </td>
+                          <td>
+                            <%= order.amount %>
+                          </td>
+                        </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+    </div>
+  </section>
+  <hr>
+  <div class="text-center">
+    <% if(order.payment=="paymentPending" ){ %>
+      <a href="/orders" class="btn btn-primary btn-lg">Go to My Orders</a>
+
+      <% }else{ %>
+        <a href="/shop" class="btn btn-primary btn-lg">Back to Shop</a>
+        <% } %>
+
+  </div>
+  <%- include ("footer.ejs") %>
