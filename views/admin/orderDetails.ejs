@@ -80,16 +80,6 @@
                                                 month: 'short' , day: 'numeric' , hour: 'numeric' , minute: 'numeric' ,
                                                 second: 'numeric' , hour12: false }) %>
                                         </td>
-                                        <td>
-                                           <a href="/admin/OrderDetails/'<%= data._id %>'"><button style="
-                                                background-color: blue;
-                                                color: white;
-                                                border-radius: 5px;
-                                                height: 25px;
-                                                width: 100px;
-                                                border-style: none;
-                                              " class="order-button">Order Details</button></a> 
-                                        </td>
                                     </tr>
                                     <% }); %>
                                         <% } else { %>
@@ -104,9 +94,7 @@
         </div>
     </div>
     <script>
-        function submitForm(orderId) {
-            document.getElementById(`orderStatusForm_${orderId}`).submit();
-        }
+        
     </script>
 
 

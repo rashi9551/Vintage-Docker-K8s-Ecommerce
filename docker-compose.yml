@@ -1,0 +1,6 @@
+services:
+
+    vintage:
+      image: muhammedrashi/rashi-vintage:latest
+      ports:
+        - "3000:3000"

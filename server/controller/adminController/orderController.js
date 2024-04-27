@@ -2,6 +2,7 @@ const productModel = require('../../model/productModel')
 const orderModel = require('../../model/orderModel')
 const userModel = require('../../model/userModel')
 const walletModel = require('../../model/walletModel')
+const  mongoose  = require('mongoose')
 
 
 const order = async (req, res) => {
@@ -113,5 +114,17 @@ const returnReject = async (req, res) => {
         res.render("user/serverError");
     }
 }
+const OrderDetails=async(req,res)=>{
+    try {
+        const id=req.params.id
+        console.log(id);
+        const data=await orderModel.findOne({_id:new mongoose.Types.ObjectId(id)})
+        console.log(data);
+        res.render('orderDetails',{order:data})
+    } catch (error) {
+        console.log(error);
+        res.render("user/serverError");
+    }
+}
 
-module.exports = { order, orderstatus, orderReturn, returnApprove, returnReject }
+module.exports = { order, orderstatus, orderReturn, returnApprove, returnReject,OrderDetails }

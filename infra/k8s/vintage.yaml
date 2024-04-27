@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vintage-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vintage
+  template:
+    metadata:
+      labels:
+        app: vintage
+    spec:
+      containers:
+        - name: vintage 
+          image: muhammedrashi/rashi-vintage:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vintage
+spec:
+  selector:
+    app: vintage
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP

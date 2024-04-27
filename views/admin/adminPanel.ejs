@@ -81,7 +81,7 @@
                   <div class="col-8">
                     <h5 class="card-title mb-9 fw-semibold"> Total Orders </h5>
                     <h4 class="fw-semibold mb-3">
-                      <%= orders[0].totalOrders %> Orders
+                      <%= orders[0]?.totalOrders %> Orders
                     </h4>
                     <div class="d-flex align-items-center pb-1">
                       <span
@@ -110,7 +110,7 @@
                 <div class="row alig n-items-start">
                   <div class="col-8">
                     <h5 class="card-title mb-9 fw-semibold"> Total Earnings </h5>
-                    <h4 class="fw-semibold mb-3">₹<%= orders[0].totalAmount %>
+                    <h4 class="fw-semibold mb-3">₹<%= orders[0]?.totalAmount %>
                     </h4>
                     <div class="d-flex align-items-center pb-1">
                       <span
