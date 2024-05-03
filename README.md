@@ -22,6 +22,8 @@ Node.js: Powering the server for lightning-fast performance.
 MongoDB: A flexible database, ensuring seamless data storage and retrieval.
 
 ☁ Deployment Mastery:
+Docker
+Kubernetes
 AWS (Amazon Web Services): Scalability and reliability at its core.
 Nginx: High-performance web server ensuring smooth and secure delivery.
 
